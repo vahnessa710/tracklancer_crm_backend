@@ -4,8 +4,8 @@ class Api::V1::ProjectsController < ApplicationController
   before_action :set_project, only: [:show, :update, :destroy]
 
   def index
-    @projects = @client.projects
-    render json: { message: "Projects for client #{@client.name}", data: @projects, status: :ok }
+    @projects = Project.includes(:client).all
+    render json: { message: "Projects List", data: @projects.as_json(include: { client: { only: [:name] } }), status: :ok }
   end
 
   def show
